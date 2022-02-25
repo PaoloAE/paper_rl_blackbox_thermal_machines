@@ -9,6 +9,9 @@ sys.path.append(os.path.join('..','src'))
 import sac_tri
 import plotting
 import torch
+import bz2
+import _pickle as cPickle
+import pickle
 
 """
 This module contains support and extra functions.
@@ -292,3 +295,37 @@ def enable_faster_training():
     torch.autograd.set_detect_anomaly(False)
     torch.autograd.profiler.profile(False)
     torch.autograd.profiler.emit_nvtx(False)
+
+def pickle_data(file_location, data):
+    """
+    saved an object to file compressing it with bz2
+
+    Args:
+        file_location (str): where the file should be stored
+        data(obj): data to be saved
+    """
+    with bz2.BZ2File(file_location, "w") as f: 
+        cPickle.dump(data, f)
+
+def unpickle_data(file, uncompressed_file = None):
+    """
+    Loads the file and return the unpickled data.
+
+    Args:
+        file(str): the compressed file to load
+        uncompressed_file(str): if specified, it loads it as an uncompressed file if it cant find file
+    """
+    #this line is for backward compatibility, to load old pickled files
+    sys.modules['sac_tri_temps'] = sac_tri
+
+    #if the compressed file exists
+    if os.path.exists(file):
+        data = bz2.BZ2File(file, "rb")
+        data = cPickle.load(data)
+    else:
+        #if the uncompressed file must be loaded
+        with open(uncompressed_file, 'rb') as input:
+            data = pickle.load(input)
+
+    return data
+

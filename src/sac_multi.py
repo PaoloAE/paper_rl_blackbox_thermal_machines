@@ -3,7 +3,6 @@ import os
 import numpy as np
 import torch
 import torch.optim as optim
-import pickle
 import shutil
 import sys
 import warnings
@@ -118,6 +117,7 @@ class SacTrain(object):
     #define some constants defining the filestructure of the logs and saved state.
     PARAMS_FILE_NAME = "params.txt"
     S_FILE_NAME = "s.dat"
+    S_FILE_NAME_BZ2 = "s_bz2.dat"
     POLICY_NET_FILE_NAME = "policy_net.dat"
     TARGET_NET_FILE_NAME = "target_net.dat"
     ERROR_LOG_FILE_NAME = "caught_errors.log"
@@ -248,9 +248,9 @@ class SacTrain(object):
             save_dir_path = os.path.join(save_dir_path, str(index))
 
         #load self.s
-        with open(os.path.join(save_dir_path, self.S_FILE_NAME), 'rb') as input:
-            self.s = pickle.load(input)
-        
+        self.s = extra.unpickle_data(os.path.join(save_dir_path, self.S_FILE_NAME_BZ2),
+                                 uncompressed_file = os.path.join(save_dir_path, self.S_FILE_NAME))
+
         #add an attribute to the replay buffer for back-compatibility
         if not hasattr(self.s.memory, "device"):
             self.s.memory.device = self.s.device
@@ -366,8 +366,7 @@ class SacTrain(object):
         #create the folder to save the state
         Path(path_location).mkdir(parents=True, exist_ok=True)
         #save self.s state object
-        with open(os.path.join(path_location, self.S_FILE_NAME), 'wb') as output:  # Overwrites any existing file.
-            pickle.dump(self.s, output, pickle.HIGHEST_PROTOCOL)
+        extra.pickle_data(os.path.join(path_location, self.S_FILE_NAME_BZ2), self.s)    
         #save policy_net params
         torch.save(self.ac.state_dict(), os.path.join(path_location, self.POLICY_NET_FILE_NAME))
         #save target_net params
