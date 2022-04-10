@@ -1,10 +1,12 @@
 *.pyc
 *.pdf
 *.ipynb_checkpoints
+*.7z
+*.zip
+*.tmp
 data/
 important_data/
-paper_plot_data/paper_plot_data.7z
-paper_plot_data/paper_plot_data.zip
 paper_plot_data/harmonic_engine
 paper_plot_data/qubit_refrigerator
+paper_plot_data/failed_trainings
 exta_runs/
