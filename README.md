@@ -1,5 +1,5 @@
 # paper_rl_blackbox_thermal_machines
-Code used to produce the results presented in the manuscript "*Driving black-box quantum thermal machines with optimal power/efficiency trade-offs using reinforcement learning*" by P.A. Erdman and F. Noé.
+Code used to produce the results presented in the manuscript "*Model-free optimization of power/efficiency tradeoffs in quantum thermal machines using reinforcement learning*" by P.A. Erdman and F. Noé.
 
 ## Getting started
 To get started, open the [```jupyter_qubit_refrigerator```](jupyter_qubit_refrigerator) or the [```jupyter_harmonic_engine```](jupyter_harmonic_engine) folder if you are interested respectively in the superconducting qubit refrigerator, or in the quantum harmonic oscillator heat engine. Both folders include the following Jupyter Notebooks:
